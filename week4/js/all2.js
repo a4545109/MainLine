@@ -25,9 +25,7 @@ new Vue({
             path: 'https://course-ec-api.hexschool.io/api/'
         },
         token: '',
-        status: {
-            fileUploading: false,
-          },
+        filePath:'',
         isNew: false,
         loadingBtn: '',
     },

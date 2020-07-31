@@ -20,7 +20,7 @@ export default {
           <div class="form-group">
             <label for="customFile">
               或 上傳圖片
-              <i v-if="status.fileUploading" class="fas fa-spinner fa-spin"></i>
+              <i class="fas fa-spinner fa-spin"></i>
             </label>
             <input id="customFile" type="file" class="form-control" @change="uploadFile">
           </div>
@@ -96,7 +96,7 @@ export default {
       // tempProduct:{}
     };
   },
-  props: ['tempProduct', 'api', 'isNew', 'status'],
+  props: ['tempProduct', 'api', 'isNew'],
   methods: {
     updateProduct() {
       // 新增商品
@@ -116,6 +116,7 @@ export default {
       });
     },
     uploadFile() {
+      const url = `${this.api.path}${this.api.uuid}/admin/storage`;
       // 選取 DOM 中的檔案資訊
       const uploadedfile = document.querySelector('#customFile').files[0]
       console.dir(uploadedfile);
@@ -123,28 +124,16 @@ export default {
       const formData = new FormData();
       formData.append('file', uploadedfile);
 
-      // 路由、驗證
-      const url = `${this.api.path}${this.api.uuid}/admin/storage`;
-      this.status.fileUploading = true;
-    
-      // 請自行完成 Ajax 範例
       axios.post(url, formData, {
-          headers: {
-              'Content-Type': 'multipart/form-data',
-          }
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
       })
-          .then(res => {
-            this.status.fileUploading = false;
-            if (response.status === 200) {
-              this.tempProduct = { imageUrl: [] };
-            }
-          })
-          .catch(() => {
-            console.log('上傳不可超過 2 MB');
-            this.status.fileUploading = false;
-          });
+        .then(res => {
+          console.log(res);
+          this.tempProduct.imageUrl[0] = res.data.data.path;
           
-  },
-   
+        })
+    }
   }
 };
