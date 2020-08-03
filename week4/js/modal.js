@@ -130,9 +130,12 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
-          this.tempProduct.imageUrl[0] = res.data.data.path;
-          
+          const imgPath = res.data.data.path;
+          if (this.tempProduct.id) {
+            this.tempProduct.imageUrl[0] = imgPath;
+          }else if (!this.tempProduct.id){
+            this.tempProduct.imageUrl.push(imgPath);
+          }
         })
     }
   }
